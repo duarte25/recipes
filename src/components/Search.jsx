@@ -1,51 +1,55 @@
 // components/Search.js
-import { useState } from "react";
-import { TextField, Autocomplete, CircularProgress } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, CircularProgress, FormControl } from "@mui/material";
+import { debounce } from 'lodash';
+import { useQuery } from "react-query";
+import { fetchApi } from "@/app/utils/fetchApi";
 
-const Search = ({ options, onSearch }) => {
-  const [inputValue, setInputValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
+export default function Search({ onSearchResults }) {  // Recebe o callback como prop
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery); 
 
-  const handleInputChange = async (event, newValue) => {
-    setInputValue(newValue);
-    setLoading(true);
-    
-    // Simula uma busca assíncrona (ex: fetch API ou busca local)
-    const searchResults = options.filter((option) =>
-      option.toLowerCase().includes(newValue.toLowerCase())
-    );
+  const debouncedSearch = debounce((query) => {
+      setDebouncedSearchQuery(query);
+  }, 500); 
 
-    setSuggestions(searchResults);
-    setLoading(false);
+  const handleSearchChange = (event) => {
+      setSearchQuery(event.target.value); 
+      debouncedSearch(event.target.value); 
   };
 
-  return (
-    <Autocomplete
-      freeSolo
-      options={suggestions}
-      inputValue={inputValue}
-      onInputChange={handleInputChange}
-      loading={loading}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Search"
-          variant="outlined"
-          sx={{ backgroundColor: 'white', width: "400px" }}  // Define o fundo branco
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-        />
-      )}
-    />
-  );
-};
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["getReceita", debouncedSearchQuery],
+    queryFn: async () => {
+      if (!debouncedSearchQuery) return { data: [] }; // Retorna vazio se não houver busca
+      const response = await fetchApi("/search.php", "GET", { s: debouncedSearchQuery });
+      return { data: response.data };  // Retorna os dados da API
+    },
+    enabled: !!debouncedSearchQuery,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
 
-export default Search;
+  // Passa os resultados de volta para o `Home`
+  React.useEffect(() => {
+    if (data && data.data.meals) {
+      onSearchResults(data.data.meals);  // Envia os dados da busca para o `Home`
+    }
+  }, [data, onSearchResults]);
+
+  return (
+    <FormControl fullWidth>
+      <TextField
+        label="Search"
+        variant="outlined"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        InputProps={{
+          endAdornment: isLoading ? (
+            <CircularProgress color="inherit" size={20} />
+          ) : null,
+        }}
+      />
+    </FormControl>
+  );
+}

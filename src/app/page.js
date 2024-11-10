@@ -1,25 +1,33 @@
-"use client"
+"use client";
 
 import { fetchApi } from "@/app/utils/fetchApi";
 import Header from "@/components/Header";
+import Table from "@/components/TableCategory";
 import { BottomNavigation, BottomNavigationAction, Tooltip } from "@mui/material";
 import { useQuery } from "react-query";
-
+import { useState } from "react";
+import TableCategory from "@/components/TableCategory";
+import Search from "@/components/Search";
 
 export default function Home() {
+  // Estado para armazenar a categoria selecionada
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchResults, setSearchResults] = useState([]); 
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getReceita"],
     queryFn: async () => {
-      // const response = await fetchApi("/search.php", "GET", { s: "Arrabiata" });
       const response = await fetchApi("/categories.php", "GET");
-
-      // A função fetchApi já retorna { data: response.data } diretamente
       return { data: response.data };
     }
   });
 
   const categories = data?.data.categories || [];
+
+    // Função de callback para atualizar os resultados da busca
+    const handleSearchResults = (results) => {
+      setSearchResults(results);  // Atualiza o estado com os resultados da busca
+    };
 
   return (
     <div>
@@ -30,7 +38,12 @@ export default function Home() {
 
         {/* Carrossel de Categorias com BottomNavigation */}
         <div className="w-full h-20 overflow-x-auto">
-          <BottomNavigation showLabels className="w-max flex">
+          <BottomNavigation
+            value={selectedCategory} // Define o valor atual do BottomNavigation
+            onChange={(event, newValue) => setSelectedCategory(newValue)} // Atualiza o estado quando uma categoria é selecionada
+            showLabels
+            className="w-max flex"
+          >
             {categories.map((category) => (
               <Tooltip key={category.idCategory} title={category.strCategoryDescription} arrow>
                 <BottomNavigationAction
@@ -43,15 +56,26 @@ export default function Home() {
                       className="w-96 h-10 rounded-full object-cover"
                     />
                   }
-                  onClick={() => console.log(`Categoria selecionada: ${category.strCategory}`)}
                 />
               </Tooltip>
             ))}
           </BottomNavigation>
         </div>
 
-        
+        <Search onSearchResults={handleSearchResults} />
+
+        {selectedCategory && (
+          <div className="mt-4 text-lg text-gray-700">
+            Categoria selecionada: {selectedCategory}
+          </div>
+        )}
       </div>
+
+      {selectedCategory  && (
+        <TableCategory category={selectedCategory} search={searchResults} />
+      ) }
+
+
     </div>
   );
 }
