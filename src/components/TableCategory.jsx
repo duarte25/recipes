@@ -82,6 +82,22 @@ export default function TableSearch() {
                                 <CircularProgress color="inherit" size={20} />
                             ) : null,
                         }}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '&:hover fieldset': {
+                                    borderColor: 'rgb(229 231 235)',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'rgb(229 231 235)',
+                                },
+                            },
+                            '& .MuiFormLabel-root': {
+                                color: 'rgb(229 231 235)',
+                            },
+                            '& .Mui-focused .MuiFormLabel-root': {
+                                color: 'rgb(229 231 235)', 
+                            },
+                        }}
                     />
                 </FormControl>
 
@@ -127,7 +143,7 @@ export default function TableSearch() {
                 <div className="flex flex-wrap gap-10 px-5">
                     {data && data.length > 0 ? (
                         data.map((meal) => (
-                            <Card key={meal.idMeal} className="w-1/5 my-2 mx-auto" style={{background: "rgb(229 231 235)"}} >
+                            <Card key={meal.idMeal} className="w-1/5 my-2 mx-auto" style={{ background: "rgb(229 231 235)" }} >
                                 <CardHeader
                                     action={
                                         <IconButton aria-label="settings">
@@ -158,7 +174,7 @@ export default function TableSearch() {
                                     <IconButton aria-label="share">
                                         <ShareIcon />
                                     </IconButton>
-                                    <Button size="small">Learn More</Button>
+                                    <Button sx={{ color: "rgb(75 85 99)" }} className="hover:text-blue-500">Learn More</Button>
                                 </CardActions>
                             </Card>
                         ))

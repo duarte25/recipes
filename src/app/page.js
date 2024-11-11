@@ -1,13 +1,7 @@
 "use client";
 
-import { fetchApi } from "@/app/utils/fetchApi";
 import Header from "@/components/Header";
-import Table from "@/components/TableCategory";
-import { BottomNavigation, BottomNavigationAction, Tooltip } from "@mui/material";
-import { useQuery } from "react-query";
-import { useState } from "react";
 import TableCategory from "@/components/TableCategory";
-import Search from "@/components/Search";
 
 export default function Home() {
 
