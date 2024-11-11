@@ -1,27 +1,32 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
-import { Button, Menu, Tooltip, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, TextField, FormControl } from '@mui/material';
+import {
+    Button, Menu, Tooltip, MenuItem, CircularProgress, TextField, FormControl, Card, CardHeader, IconButton,
+    CardMedia, CardContent, CardActions, Avatar, Typography
+} from '@mui/material';
 import { useQuery } from "react-query";
 import { debounce } from 'lodash';
 import { fetchApi } from "@/app/utils/fetchApi";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
 
-export default function TableSearch({ category }) {
+export default function TableSearch() {
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(category || null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const debouncedSearch = debounce((query) => {
         setDebouncedSearchQuery(query);
     }, 500);
 
-    // Função para lidar com mudanças no campo de busca
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
-        setSelectedCategory(null); // Limpa a categoria selecionada
+        setSelectedCategory(null);
         debouncedSearch(event.target.value);
     };
 
-    // Função de busca usando useQuery para dados
     const { data, isLoading } = useQuery({
         queryKey: ["getReceita", debouncedSearchQuery || selectedCategory],
         queryFn: async () => {
@@ -36,7 +41,6 @@ export default function TableSearch({ category }) {
         retry: false,
     });
 
-    // Carregar categorias
     const { data: dataCategory, isLoading: isLoadingCategory } = useQuery({
         queryKey: ["getCategories"],
         queryFn: async () => {
@@ -55,21 +59,19 @@ export default function TableSearch({ category }) {
         setAnchorEl(null);
     };
 
-    // Função para lidar com a seleção de uma categoria
     const handleCategorySelect = (category) => {
-        setSelectedCategory(category.strCategory);  // Define a categoria selecionada
-        setSearchQuery(""); // Limpa o campo de pesquisa
-        setDebouncedSearchQuery(""); // Remove qualquer termo de pesquisa anterior
-        setAnchorEl(null);  // Fecha o menu
+        setSelectedCategory(category.strCategory);
+        setSearchQuery("");
+        setDebouncedSearchQuery("");
+        setAnchorEl(null);
     };
 
-    // Exibe uma mensagem de carregamento enquanto as categorias são carregadas
     if (isLoadingCategory) return <p>Carregando...</p>;
 
     return (
         <>
             <div className="flex flex-row gap-5 justify-center">
-                <FormControl fullWidth className="w-2/5">
+                <FormControl className="w-1/5">
                     <TextField
                         label="Search"
                         variant="outlined"
@@ -84,7 +86,7 @@ export default function TableSearch({ category }) {
                 </FormControl>
 
                 <Button
-                    className="w-2/5"
+                    className="w-1/5"
                     aria-controls={anchorEl ? "category-menu" : undefined}
                     aria-haspopup="true"
                     onClick={handleMenuClick}
@@ -122,36 +124,50 @@ export default function TableSearch({ category }) {
                     <CircularProgress />
                 </div>
             ) : (
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell><strong>Name</strong></TableCell>
-                                <TableCell><strong>Image</strong></TableCell>
-                                <TableCell><strong>ID</strong></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data && data.length > 0 ? (
-                                data.map((meal) => (
-                                    <TableRow key={meal.idMeal}>
-                                        <TableCell>{meal.strMeal}</TableCell>
-                                        <TableCell>
-                                            <img src={meal.strMealThumb} alt={meal.strMeal} width="100" />
-                                        </TableCell>
-                                        <TableCell>{meal.idMeal}</TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={3} align="center">
-                                        No meals found for this {debouncedSearchQuery ? "search term" : "category"}.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <div className="flex flex-wrap gap-10 px-5">
+                    {data && data.length > 0 ? (
+                        data.map((meal) => (
+                            <Card key={meal.idMeal} className="w-1/5 my-2 mx-auto" style={{background: "rgb(229 231 235)"}} >
+                                <CardHeader
+                                    action={
+                                        <IconButton aria-label="settings">
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                    }
+                                    title={meal.strMeal}
+                                />
+                                <CardMedia
+                                    component="img"
+                                    height="194"
+                                    image={meal.strMealThumb}
+                                    alt={meal.strMeal}
+                                />
+                                <CardContent>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        className="h-40 overflow-hidden text-ellipsis"
+                                    >
+                                        {meal.strInstructions}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions disableSpacing>
+                                    <IconButton aria-label="add to favorites">
+                                        <FavoriteIcon />
+                                    </IconButton>
+                                    <IconButton aria-label="share">
+                                        <ShareIcon />
+                                    </IconButton>
+                                    <Button size="small">Learn More</Button>
+                                </CardActions>
+                            </Card>
+                        ))
+                    ) : (
+                        <p style={{ textAlign: 'center', marginTop: '20px' }}>
+                            No meals found for this.
+                        </p>
+                    )}
+                </div>
             )}
         </>
     );
