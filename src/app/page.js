@@ -12,7 +12,7 @@ import Search from "@/components/Search";
 export default function Home() {
   // Estado para armazenar a categoria selecionada
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [searchResults, setSearchResults] = useState([]); 
+  const [searchResults, setSearchResults] = useState([]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getReceita"],
@@ -24,10 +24,10 @@ export default function Home() {
 
   const categories = data?.data.categories || [];
 
-    // Função de callback para atualizar os resultados da busca
-    const handleSearchResults = (results) => {
-      setSearchResults(results);  // Atualiza o estado com os resultados da busca
-    };
+  // Função de callback para atualizar os resultados da busca
+  const handleSearchResults = (results) => {
+    setSearchResults(results);  // Atualiza o estado com os resultados da busca
+  };
 
   return (
     <div>
@@ -62,7 +62,7 @@ export default function Home() {
           </BottomNavigation>
         </div>
 
-        <Search onSearchResults={handleSearchResults} />
+        {/* <Search onSearchResults={handleSearchResults} /> */}
 
         {selectedCategory && (
           <div className="mt-4 text-lg text-gray-700">
@@ -71,9 +71,8 @@ export default function Home() {
         )}
       </div>
 
-      {selectedCategory  && (
-        <TableCategory category={selectedCategory} search={searchResults} />
-      ) }
+
+      <TableCategory category={selectedCategory} />
 
 
     </div>
