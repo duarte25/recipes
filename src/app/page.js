@@ -36,8 +36,7 @@ export default function Home() {
       <div className="flex flex-col items-center px-4 py-8">
         <h1 className="text-black text-2xl font-bold mb-6">Categorias</h1>
 
-        {/* Carrossel de Categorias com BottomNavigation */}
-        <div className="w-full h-20 overflow-x-auto">
+        {/* <div className="w-full h-20 overflow-x-auto">
           <BottomNavigation
             value={selectedCategory} // Define o valor atual do BottomNavigation
             onChange={(event, newValue) => setSelectedCategory(newValue)} // Atualiza o estado quando uma categoria é selecionada
@@ -60,15 +59,13 @@ export default function Home() {
               </Tooltip>
             ))}
           </BottomNavigation>
-        </div>
+        </div> */}
 
-        {/* <Search onSearchResults={handleSearchResults} /> */}
-
-        {selectedCategory && (
+        {/* {selectedCategory && (
           <div className="mt-4 text-lg text-gray-700">
             Categoria selecionada: {selectedCategory}
           </div>
-        )}
+        )} */}
       </div>
 
 
