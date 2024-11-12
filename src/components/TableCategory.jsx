@@ -72,6 +72,7 @@ export default function TableSearch() {
         <>
             <div className="flex flex-row gap-5 justify-center">
                 <FormControl className="w-1/5">
+                    {/* VE se consegue trazer um border para esse search troca no de baixo também ta bugado */}
                     <TextField
                         label="Search"
                         variant="outlined"
@@ -84,30 +85,36 @@ export default function TableSearch() {
                         }}
                         sx={{
                             '& .MuiOutlinedInput-root': {
+                                borderRadius: "0.375rem",
+                                '& fieldset': {
+                                    borderColor: 'rgb(229 231 235)', // Cor da borda padrão
+                                },
                                 '&:hover fieldset': {
-                                    borderColor: 'rgb(229 231 235)',
+                                    borderColor: 'rgb(229 231 235)', // Cor da borda no hover
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: 'rgb(229 231 235)',
+                                    borderColor: 'rgb(229 231 235)', // Cor da borda no foco
                                 },
                             },
                             '& .MuiFormLabel-root': {
-                                color: 'rgb(229 231 235)',
+                                color: 'rgb(229 231 235)', // Cor padrão do label
                             },
                             '& .Mui-focused .MuiFormLabel-root': {
-                                color: 'rgb(229 231 235)', 
+                                color: 'rgb(229 231 235)', // Mantém a cor do label no foco
                             },
                         }}
                     />
                 </FormControl>
 
                 <Button
-                    className="w-1/5"
+                    className="w-1/5 text-white rounded-xl hover:bg-orange-700 focus:bg-orange-700 active:bg-orange-800"
                     aria-controls={anchorEl ? "category-menu" : undefined}
                     aria-haspopup="true"
                     onClick={handleMenuClick}
                     variant="contained"
-                    color="primary"
+                    sx={{
+                        backgroundColor: "rgb(234 88 12)"
+                    }}
                 >
                     Categories
                 </Button>
@@ -140,7 +147,7 @@ export default function TableSearch() {
                     <CircularProgress />
                 </div>
             ) : (
-                <div className="flex flex-wrap gap-10 px-5">
+                <div className="flex flex-wrap gap-10 justify-center px-5 py-10">
                     {data && data.length > 0 ? (
                         data.map((meal) => (
                             <Card key={meal.idMeal} className="w-1/5 my-2 mx-auto" style={{ background: "rgb(229 231 235)" }} >
@@ -179,7 +186,7 @@ export default function TableSearch() {
                             </Card>
                         ))
                     ) : (
-                        <p style={{ textAlign: 'center', marginTop: '20px' }}>
+                        <p className="text-center mt-10 text-5xl">
                             No meals found for this.
                         </p>
                     )}

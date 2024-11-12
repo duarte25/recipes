@@ -10,7 +10,7 @@ export default function Home() {
       <Header />
 
       <div className="flex flex-col items-center px-4 py-8">
-        <h1 className="text-black text-2xl font-bold mb-6">Recipes</h1>
+        <h1 className="text-amber-300 text-6xl font-bold mb-6">Recipes</h1>
       </div>
 
       <TableCategory />
