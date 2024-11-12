@@ -10,7 +10,8 @@ export default function Header() {
                 height={250}
                 alt="Logo"
             />
-            <li className="list-none text-2xl">Home</li>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <li className="list-none text-2xl"><a href="/">Home</a></li>
         </div >
     );
 }
