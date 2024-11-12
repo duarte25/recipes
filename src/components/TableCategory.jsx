@@ -1,16 +1,15 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Button, Menu, Tooltip, MenuItem, CircularProgress, TextField, FormControl, Card, CardHeader, IconButton,
-    CardMedia, CardContent, CardActions, Avatar, Typography
-} from '@mui/material';
+    CardMedia, CardContent, CardActions, Typography
+} from "@mui/material";
 import { useQuery } from "react-query";
-import { debounce } from 'lodash';
-import { fetchApi } from "@/app/utils/fetchApi";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import Link from 'next/link';
+import { debounce } from "lodash";
+import { fetchApi } from "@/app/utils/fetchApi.js";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import Link from "next/link";
 
 export default function TableSearch() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -67,41 +66,44 @@ export default function TableSearch() {
         setAnchorEl(null);
     };
 
-    if (isLoadingCategory) return <p>Carregando...</p>;
-
     return (
         <>
             <div className="flex flex-row gap-5 justify-center">
+                {/* Pelo tempo ser curto apenas modifiquei a cor para não ficar diferente e nem o padrão trazido do MUI */}
                 <FormControl className="w-1/5">
-                    {/* VE se consegue trazer um border para esse search troca no de baixo também ta bugado */}
                     <TextField
                         label="Search"
                         variant="outlined"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        InputProps={{
-                            endAdornment: isLoading ? (
-                                <CircularProgress color="inherit" size={20} />
-                            ) : null,
-                        }}
                         sx={{
-                            '& .MuiOutlinedInput-root': {
+                            "& .MuiOutlinedInput-root": {
                                 borderRadius: "0.375rem",
-                                '& fieldset': {
-                                    borderColor: 'rgb(229 231 235)', // Cor da borda padrão
+                                backgroundColor: "rgb(234 88 12)",
+                                "&.Mui-focused": {
+                                    backgroundColor: "rgb(234 88 12)", 
                                 },
-                                '&:hover fieldset': {
-                                    borderColor: 'rgb(229 231 235)', // Cor da borda no hover
+                                "& .MuiInputBase-input": {
+                                    backgroundColor: "rgb(234 88 12)", 
+                                    color: "rgb(31 41 55)", 
+                                    caretColor: "rgb(31 41 55)", 
+                                    borderRadius: "0.375rem",
                                 },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'rgb(229 231 235)', // Cor da borda no foco
+                                "& fieldset": {
+                                    borderColor: "rgb(229 231 235)",
+                                },
+                                "&:hover fieldset": {
+                                    borderColor: "rgb(229 231 235)",
+                                },
+                                "&.Mui-focused fieldset": {
+                                    borderColor: "rgb(229 231 235)",
                                 },
                             },
-                            '& .MuiFormLabel-root': {
-                                color: 'rgb(229 231 235)', // Cor padrão do label
+                            "& .MuiFormLabel-root": {
+                                color: "rgb(212 212 216)", 
                             },
-                            '& .Mui-focused .MuiFormLabel-root': {
-                                color: 'rgb(229 231 235)', // Mantém a cor do label no foco
+                            "& .Mui-focused .MuiFormLabel-root": {
+                                color: "rgb(229 231 235)", 
                             },
                         }}
                     />
@@ -125,10 +127,11 @@ export default function TableSearch() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                     MenuListProps={{
-                        'aria-labelledby': 'category-button',
+                        "aria-labelledby": "category-button",
                     }}
                 >
                     {categories.map((category) => (
+
                         <Tooltip key={category.idCategory} arrow>
                             <MenuItem onClick={() => handleCategorySelect(category)}>
                                 <img
@@ -144,8 +147,8 @@ export default function TableSearch() {
             </div>
 
             {isLoading ? (
-                <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                    <CircularProgress />
+                <div className="flex items-center justify-center h-screen">
+                    <CircularProgress color="white" size={150} />
                 </div>
             ) : (
                 <div className="flex flex-wrap gap-10 justify-center px-5 py-10">
@@ -158,7 +161,11 @@ export default function TableSearch() {
                                             <MoreVertIcon />
                                         </IconButton>
                                     }
-                                    title={meal.strMeal}
+                                    title={
+                                        <span className="block whitespace-nowrap overflow-hidden text-ellipsis w-72">
+                                            {meal.strMeal}
+                                        </span>
+                                    }
                                 />
                                 <CardMedia
                                     component="img"
@@ -166,15 +173,19 @@ export default function TableSearch() {
                                     image={meal.strMealThumb}
                                     alt={meal.strMeal}
                                 />
-                                <CardContent>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                        className="h-40 overflow-hidden text-ellipsis"
-                                    >
-                                        {meal.strInstructions}
-                                    </Typography>
-                                </CardContent>
+                                {
+                                    meal.strInstructions && (
+                                        <CardContent>
+                                            <Typography
+                                                variant="body2"
+                                                color="text.secondary"
+                                                className="h-40 overflow-hidden text-ellipsis"
+                                            >
+                                                {meal.strInstructions}
+                                            </Typography>
+                                        </CardContent>
+                                    )
+                                }
                                 <CardActions disableSpacing>
                                     <IconButton aria-label="add to favorites">
                                         <FavoriteIcon />

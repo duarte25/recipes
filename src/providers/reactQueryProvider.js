@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -10,5 +10,5 @@ export default function ReactQueryProvider({ children }) {
     <QueryClientProvider client={queryClient}>
       {children}
     </QueryClientProvider>
-  )
+  );
 }

@@ -1,6 +1,5 @@
-// app/layout.js
-import ReactQueryProvider from '@/providers/reactQueryProvider';
-import './globals.css'; 
+import ReactQueryProvider from "@/providers/reactQueryProvider.js";
+import "./globals.css"; 
 
 export const metadata = {
   title: "Create Next App",

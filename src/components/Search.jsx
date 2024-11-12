@@ -1,9 +1,8 @@
-// components/Search.js
 import React, { useState } from "react";
 import { TextField, CircularProgress, FormControl } from "@mui/material";
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 import { useQuery } from "react-query";
-import { fetchApi } from "@/app/utils/fetchApi";
+import { fetchApi } from "@/app/utils/fetchApi.js";
 
 export default function Search({ onSearchResults }) {  // Recebe o callback como prop
   const [searchQuery, setSearchQuery] = useState(""); 
@@ -46,7 +45,7 @@ export default function Search({ onSearchResults }) {  // Recebe o callback como
         onChange={handleSearchChange}
         InputProps={{
           endAdornment: isLoading ? (
-            <CircularProgress color="inherit" size={20} />
+            <CircularProgress color="white" size={150}  />
           ) : null,
         }}
       />

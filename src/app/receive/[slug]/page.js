@@ -1,10 +1,10 @@
 "use client";
 
-import { fetchApi } from '@/app/utils/fetchApi';
-import Header from '@/components/Header';
-import { CardMedia, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { useParams } from 'next/navigation';
-import { useQuery } from 'react-query';
+import { fetchApi } from "@/app/utils/fetchApi.js";
+import Header from "@/components/Header.jsx";
+import { CardMedia, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { useParams } from "next/navigation";
+import { useQuery } from "react-query";
 
 const ReceivePage = () => {
     const { slug } = useParams();
@@ -25,11 +25,11 @@ const ReceivePage = () => {
         <>
             <Header />
             {isLoading ? (
-                <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                    <CircularProgress />
+                <div className="flex items-center justify-center h-screen">
+                    <CircularProgress color="white" size={150} />
                 </div>
             ) : (
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center  py-8">
                     <Typography variant="h2" gutterBottom>
                         {data.strMeal}
                     </Typography>
@@ -58,7 +58,7 @@ const ReceivePage = () => {
                                         return ingredient && ingredient.trim() ? (
                                             <TableRow key={i}>
                                                 <TableCell>{ingredient}</TableCell>
-                                                <TableCell>{measure || ''}</TableCell>
+                                                <TableCell>{measure || ""}</TableCell>
                                             </TableRow>
                                         ) : null;
                                     })}

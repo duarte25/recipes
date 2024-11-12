@@ -1,7 +1,7 @@
 "use client";
 
-import Header from "@/components/Header";
-import TableCategory from "@/components/TableCategory";
+import Header from "@/components/Header.jsx";
+import TableCategory from "@/components/TableCategory.jsx";
 
 export default function Home() {
 
@@ -9,8 +9,8 @@ export default function Home() {
     <div>
       <Header />
 
-      <div className="flex flex-col items-center px-4 py-8">
-        <h1 className="text-amber-300 text-6xl font-bold mb-6">Recipes</h1>
+      <div className="flex flex-col items-center py-8">
+        <h1 className="text-orange-500 text-6xl font-bold mb-6">Recipes</h1>
       </div>
 
       <TableCategory />

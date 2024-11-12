@@ -1,4 +1,4 @@
-import { createURLSearch } from "./createURLSearch";
+import { createURLSearch } from "./createURLSearch.js";
 
 export const fetchApi = async (route, method, data, ...props) => {
   try {
@@ -28,7 +28,6 @@ export const fetchApi = async (route, method, data, ...props) => {
     });
 
     const responseData = await response.json();
-    // Aqui, verificamos se a chave `meals` existe na resposta e retornamos ela
     if (responseData) {
       return {
         data: responseData,
