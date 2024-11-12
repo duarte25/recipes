@@ -10,6 +10,7 @@ import { fetchApi } from "@/app/utils/fetchApi";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import Link from 'next/link';
 
 export default function TableSearch() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -181,7 +182,9 @@ export default function TableSearch() {
                                     <IconButton aria-label="share">
                                         <ShareIcon />
                                     </IconButton>
-                                    <Button sx={{ color: "rgb(75 85 99)" }} className="hover:text-blue-500">Learn More</Button>
+                                    <Link href={`/receive/${meal.idMeal}`} passHref>
+                                        <Button sx={{ color: "rgb(75 85 99)" }} className="hover:text-blue-500">Learn More</Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         ))
